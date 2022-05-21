@@ -11,7 +11,7 @@ return response.json();
 function markup(arrayobject,objectid){
     return`
     <div class="listitem" id="${objectid}">
-        <p onclick="updateimage(${objectid})">${arrayobject.title}</p>
+        <p onclick="updateimage(${objectid})"><img src="${arrayobject.previewImage}" class="logo"></img> ${arrayobject.title}</p>
     </div>
     `
 }
@@ -23,31 +23,36 @@ function Renderimage(){
 
 function updateimage(objectid){
     console.log(objectid);
-    const imagelist = document.querySelectorAll(".listitem");
-    imagelist.forEach(element =>{
-        element.style.backgroundColor = "white";
-    });
+    // const imagelist = document.querySelectorAll(".listitem");
+    // imagelist.forEach(element =>{
+    //     element.style.backgroundColor = "white";
+    // });
     currentID=objectid;
-    curimage = document.getElementById(currentID);
-    curimage.style.backgroundColor = "blue";
+    // curimage = document.getElementById(currentID);
+    // curimage.style.backgroundColor = "blue";
     Renderimage();
 }
 
 function logKey(event) {
     if(event.code=='ArrowDown'&&currentID+1<dataArray.length){
-        let curimage = document.getElementById(currentID);
-        curimage.style.backgroundColor = "white";
+        // let curimage = document.getElementById(currentID);
+        // curimage.style.backgroundColor = "white";
         currentID+=1;
         Renderimage();
     }
     else if(event.code=='ArrowUp'&&currentID>0){
-        let curimage = document.getElementById(currentID);
-        curimage.style.backgroundColor = "white";
+        // let curimage = document.getElementById(currentID);
+        // curimage.style.backgroundColor = "white";
         currentID-=1;
         Renderimage();
     }
-    curimage = document.getElementById(currentID);
-    curimage.style.backgroundColor = "blue";
+    // curimage = document.getElementById(currentID);
+    // curimage.style.backgroundColor = "blue";
+    var elements= document.getElementsByClassName("listitem");
+    
+    var current = document.getElementsByClassName("active");
+    current[0].className = current[0].className.replace(" active", "");
+    elements[currentID].className += " active";
 }
 
 currentID=0;
@@ -62,17 +67,18 @@ function startRendering(data){
         imagelist.innerHTML= imagelist.innerHTML + ( markup(element,id));
         id++;
     });
-
     
-    curimage = document.getElementById(currentID);
-    curimage.style.backgroundColor = "red";
-    Renderimage();
-
     var elements= document.getElementsByClassName("listitem");
-
-    elements.onclick = function(event) {
-        console.log(event);
+    elements[0].className += " active";
+    Renderimage();
+    for (var i = 0; i < elements.length; i++) {
+    elements[i].addEventListener("click", function() {
+        var current = document.getElementsByClassName("active");
+        current[0].className = current[0].className.replace(" active", "");
+        this.className += " active";
+    });
     }
+
     document.addEventListener('keydown', logKey);
 }
 
