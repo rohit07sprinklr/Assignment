@@ -2,23 +2,30 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Assignment</title>
     <link
       rel="stylesheet"
-      href="./style.css"
+      href="./style.css"  
       type="text/css"
     />
     <script type="text/javascript" src="script.js"></script>
     <script type="text/javascript" src="imgfile.json"></script>
   </head>
   <body>
-    <main class="maincontent">
-        <div class="imagelist">
+    <div class="float-container">
+      <div class="float-child" id="floatimagelist">
+        <div class="imagelist"></div>
+      </div>
+      <div class="float-child">
+        <div class="imagedisplay"></div>
+        <div class="float-child" id="floattextbox">
+          <div class="textbox" contentEditable="true" id="textboxid"></div>
         </div>
-        <div class="imagedisplay">
-        </div>
-    </main>
+      </div>
+    </div>
     
+  </div>
+
   </body>
 </html>
