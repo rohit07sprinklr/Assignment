@@ -11,7 +11,7 @@ return response.json();
 // used to truncate long sentences 
 function truncateMiddle(word) {
     // Arbitary value chosen accoring to width of division
-    const tooLongChars = 30; 
+    const tooLongChars = 35; 
     if (word.length < tooLongChars) {
         return word;
     }
@@ -24,8 +24,9 @@ function truncateMiddle(word) {
 function markup(arrayobject,objectid){
     return`
     <div class="listitem" id="${objectid}" onclick="updateimage(${objectid})">
-    <p class="listitemtext"><img src="${arrayobject.previewImage}" class="logo"></img>${truncateMiddle(arrayobject.title)}</p>
-    </div>
+    <p class="listitemtext"><img src="${arrayobject.previewImage}" class="logo"></img>
+    ${truncateMiddle(arrayobject.title)}
+    </p></div>
     `
 }
 
@@ -40,48 +41,52 @@ function textboxmarkup(){
 // Renderimage() renders the image of the current active class
 function Renderimage(){
     const imagedisplay = document.querySelector(".imagedisplay");
-    imagedisplay.innerHTML = `<img src="${dataArray[currentID].previewImage}"></img>`
+    imagedisplay.innerHTML = `
+    <img src="${dataArray[currentID].previewImage}"></img>
+    `
 }
+
 // Update the current id and rednder the image
 function updateimage(objectid){
-    console.log(objectid);
     currentID=objectid;
     Renderimage();
-    textboxmarkup()
+    textboxmarkup();
 }
+
 // inputHandler to change the list items when there is a change in label 
 const inputHandler = function(event) {
-    console.log(event.srcElement.innerText);
     var current = document.getElementsByClassName("active");
-    console.log(current[0].innerHTML);
     current[0].innerHTML =`
     <div class="listitem" id="${currentID}" onclick="updateimage(${currentID})">
-    <p class="listitemtext"><img src="${dataArray[currentID].previewImage}" class="logo"></img>${truncateMiddle(event.srcElement.innerText)}</p>
+    <p class="listitemtext"><img src="${dataArray[currentID].previewImage}" class="logo"></img>
+    ${truncateMiddle(event.srcElement.innerText)}</p>
     </div>
     `;
-
 }
 
 function logKey(event) {
-    if(event.code=='ArrowDown'&&currentID+1<dataArray.length){
-        currentID+=1;
-        Renderimage();
-        textboxmarkup()
+    if(event.code=='ArrowDown'||event.code=='ArrowUp'){
+        if(event.code=='ArrowDown'&&currentID+1<dataArray.length){
+            currentID+=1;
+            Renderimage();
+            textboxmarkup();
+        }
+        else if(event.code=='ArrowUp'&&currentID>0){
+            currentID-=1;
+            Renderimage();
+            textboxmarkup();
+        }
+        var elements= document.getElementsByClassName("listitem");
+        
+        var current = document.getElementsByClassName("active");
+        current[0].className = current[0].className.replace(" active", "");
+        elements[currentID].className += " active";
     }
-    else if(event.code=='ArrowUp'&&currentID>0){
-        currentID-=1;
-        Renderimage();
-        textboxmarkup()
-    }
-    var elements= document.getElementsByClassName("listitem");
-    
-    var current = document.getElementsByClassName("active");
-    current[0].className = current[0].className.replace(" active", "");
-    elements[currentID].className += " active";
 }
 
 // currentID is used to store the id of current active item
 currentID=0;
+
 // dataArray stores the fetched data obtained from JSON file
 var dataArray=0;
 
@@ -96,13 +101,16 @@ function startRendering(data){
         imagelist.innerHTML= imagelist.innerHTML + ( markup(element,id));
         id++;
     });
+
     // The first element is the active class
     var elements= document.getElementsByClassName("listitem");
     elements[0].className += " active";
+
     // Renderimage() renders the image of the current active class
     Renderimage();
     // textboxmarkup() used to add title as label
     textboxmarkup();
+
     // Add EventListener for on click behaviour of the list
     for (var i = 0; i < elements.length; i++) {
     elements[i].addEventListener("click", function() {
@@ -111,11 +119,11 @@ function startRendering(data){
         this.className += " active";
     });
     }
+    // Add EventListener for key press behaviour of the list
+    document.addEventListener('keydown', logKey);
+
     // Add EventListener for change in label
     const textbox = document.getElementById('textboxid');
     textbox.addEventListener('input', inputHandler);
-
-    // Add EventListener for key press behaviour of the list
-    document.addEventListener('keydown', logKey);
 }
 
