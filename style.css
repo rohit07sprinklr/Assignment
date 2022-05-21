@@ -6,7 +6,6 @@ body{
     margin-top: 3%;
     margin-left : 20%;
     border: 3px solid #fff;
-    
 }
 .float-child {
     width: 40%;
@@ -30,7 +29,6 @@ body{
     font-size: 18px;
     white-space: nowrap;
     overflow: hidden;
-    /* text-overflow:ellipsis; */
 }
 
 .imagedisplay{
