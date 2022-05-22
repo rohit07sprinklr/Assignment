@@ -56,8 +56,8 @@ function updateimage(objectid){
 // inputHandler to change the list items when there is a change in label 
 const inputHandler = function(event) {
     var current = document.getElementsByClassName("active");
+    dataArray[currentID].title=event.srcElement.innerText;
     current[0].innerHTML =`
-    <div class="listitem" id="${currentID}" onclick="updateimage(${currentID})">
     <p class="listitemtext"><img src="${dataArray[currentID].previewImage}" class="logo"></img>
     ${truncateMiddle(event.srcElement.innerText)}</p>
     </div>
@@ -79,6 +79,7 @@ function logKey(event) {
         var elements= document.getElementsByClassName("listitem");
         
         var current = document.getElementsByClassName("active");
+        
         current[0].className = current[0].className.replace(" active", "");
         elements[currentID].className += " active";
     }
