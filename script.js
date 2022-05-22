@@ -8,10 +8,38 @@ return response.json();
     startRendering(data);
 })
 
+// function to return the width of font
+function getTextWidth(text, font) {
+    const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+    const context = canvas.getContext("2d");
+    context.font = font;
+    const metrics = context.measureText(text);
+    return metrics.width;
+}
+// Get the desire style of the font
+function getCssStyle(element, prop) {
+    return window.getComputedStyle(element, null).getPropertyValue(prop);
+}
+// Get the Style of given element
+function getCanvasFontSize(elemennt) {
+    const fontWeight = getCssStyle(elemennt, 'font-weight');
+    const fontSize = getCssStyle(elemennt, 'font-size');
+    const fontFamily = getCssStyle(elemennt, 'font-family');
+    return `${fontWeight} ${fontSize} ${fontFamily}`;
+}
+
 // used to truncate long sentences 
-function truncateMiddle(word) {
-    // Arbitary value chosen accoring to width of division
-    const tooLongChars = 35; 
+function truncateMiddle(word,documentselect) {
+    // Width of font according to font size and style
+    const fontwidth =getTextWidth(word,getCanvasFontSize(documentselect));
+    // Total container width
+    const containerwidth = Number((getComputedStyle(documentselect).width).replace("px",""));  
+    // Width occupied by logo
+    const logowidth = Number(getComputedStyle(document.getElementsByClassName("imagelogo")[0]).width.replace("px","")); 
+    
+    // Count of limit of char for truncation according to width of div 
+    const tooLongChars=(( word.length/ fontwidth) * (containerwidth-logowidth));
+    
     if (word.length < tooLongChars) {
         return word;
     }
@@ -25,7 +53,7 @@ function markup(arrayobject,objectid){
     return`
     <div class="listitem" id="${objectid}" onclick="updateimage(${objectid})">
     <p class="listitemtext"><img src="${arrayobject.previewImage}" class="logo"></img>
-    ${truncateMiddle(arrayobject.title)}
+    ${truncateMiddle(arrayobject.title,document.getElementsByClassName("imagelist")[0])}
     </p></div>
     `
 }
@@ -59,7 +87,7 @@ const inputHandler = function(event) {
     dataArray[currentID].title=event.srcElement.innerText;
     current[0].innerHTML =`
     <p class="listitemtext"><img src="${dataArray[currentID].previewImage}" class="logo"></img>
-    ${truncateMiddle(event.srcElement.innerText)}</p>
+    ${truncateMiddle(event.srcElement.innerText,document.getElementsByClassName("imagelist")[0])}</p>
     </div>
     `;
 }
@@ -84,6 +112,20 @@ function logKey(event) {
         elements[currentID].className += " active";
     }
 }
+// To manage the resize of window to make cotent stay in center of page
+function windowresize(){
+    let contentwidth = this.document.getElementById("floatimagelist").clientWidth + 
+                       this.document.getElementById("imagecontent").clientWidth;
+
+    let contentheight = Math.max(this.document.getElementById("floatimagelist").clientHeight,
+                       this.document.getElementById("imagecontent").clientHeight);
+
+    let leftmargin = ((window.innerWidth-contentwidth)/2).toString() + "px";
+    let topmargin = ((window.innerHeight-contentheight)/2).toString() + "px";
+
+    this.document.getElementById("floatcontainer").style.marginLeft = leftmargin;
+    this.document.getElementById("floatcontainer").style.marginTop = topmargin;
+}
 
 // currentID is used to store the id of current active item
 currentID=0;
@@ -93,6 +135,8 @@ var dataArray=0;
 
 // After fetch, startRendering() Starts to render script
 function startRendering(data){
+    // Center align the content of webpage
+    windowresize();
     dataArray = data;
     // At startup the active item is the first elemennt
     id=0;          
@@ -126,5 +170,7 @@ function startRendering(data){
     // Add EventListener for change in label
     const textbox = document.getElementById('textboxid');
     textbox.addEventListener('input', inputHandler);
+
+    window.addEventListener('resize', windowresize);
 }
 

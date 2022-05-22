@@ -2,10 +2,7 @@ body{
     margin: 0;
     font-size: 25px;
 }
-.float-container {
-    margin-top: 3%;
-    margin-left : 20%;
-}
+
 .float-child {
     padding: 10px;
     width: 40%;
@@ -15,24 +12,31 @@ body{
     padding: 10px 0 0 0;
     width: 100%;
     text-align: center; 
+    word-wrap: break-word;
 }
 #floatimagelist{
     width:300px;
 }
+#imagecontent{
+    width: 500px;
+}
 .imagelist{
     width: 300px;
+    font-size: 17px;
 }
 
 .listitemtext{
     padding: 10px;
     margin: 0;
-    font-size: 17px;
     white-space: nowrap;
     overflow: hidden;
 }
 .imagedisplay{
     width:500px;
     height:700px;
+}
+.imagelogo{
+    width: 50px;
 }
 img.logo{
     vertical-align:middle;
