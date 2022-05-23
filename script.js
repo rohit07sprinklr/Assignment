@@ -131,10 +131,11 @@ function windowresize(){
     const standardsize = this.document.getElementById("imagecontent").clientWidth;
     if(window.innerWidth<standardsize){
         imagedisplay.style.width=window.innerWidth.toString()+"px";
+        document.getElementById("floattextbox").style.width=window.innerWidth.toString()+"px";
     }
 
-    this.document.getElementById("floatingcontainer").style.marginLeft = leftmargin.toString() + "px";
-    this.document.getElementById("floatingcontainer").style.marginTop = topmargin.toString() + "px";
+    this.document.getElementById("floatcontainer").style.marginLeft = leftmargin.toString() + "px";
+    this.document.getElementById("floatcontainer").style.marginTop = topmargin.toString() + "px";
 }
 
 // currentID is used to store the id of current active item
