@@ -124,6 +124,8 @@ function windowresize(){
     
     if(leftmargin<0)
         leftmargin=0,topmargin=0;
+    if(topmargin<0)
+        topmargin=0
 
     //Resize the image
     const imagedisplay = document.querySelector(".imagedisplay img");
@@ -183,4 +185,3 @@ function startRendering(data){
 
     window.addEventListener('resize', windowresize);
 }
-
