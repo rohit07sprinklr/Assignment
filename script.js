@@ -36,7 +36,6 @@ function truncateMiddle(word,documentselect) {
     const containerwidth = Number((getComputedStyle(documentselect).width).replace("px",""));  
     // Width occupied by logo
     const logowidth = Number(getComputedStyle(document.getElementsByClassName("imagelogo")[0]).width.replace("px","")); 
-    
     // Count of limit of char for truncation according to width of div 
     const tooLongChars=(( word.length/ fontwidth) * (containerwidth-logowidth));
     
@@ -120,11 +119,22 @@ function windowresize(){
     let contentheight = Math.max(this.document.getElementById("floatimagelist").clientHeight,
                        this.document.getElementById("imagecontent").clientHeight);
 
-    let leftmargin = ((window.innerWidth-contentwidth)/2).toString() + "px";
-    let topmargin = ((window.innerHeight-contentheight)/2).toString() + "px";
+    let leftmargin = ((window.innerWidth-contentwidth)/2);
+    let topmargin = ((window.innerHeight-contentheight)/2);
+    
+    if(leftmargin<0)
+        leftmargin=0,topmargin=0;
 
-    this.document.getElementById("floatcontainer").style.marginLeft = leftmargin;
-    this.document.getElementById("floatcontainer").style.marginTop = topmargin;
+    //Resize the image
+    const imagedisplay = document.querySelector(".imagedisplay img");
+    const imagesize = Number(getComputedStyle(imagedisplay).width.replace('px',''));
+    const standardsize = this.document.getElementById("imagecontent").clientWidth;
+    if(window.innerWidth<standardsize){
+        imagedisplay.style.width=window.innerWidth.toString()+"px";
+    }
+
+    this.document.getElementById("floatingcontainer").style.marginLeft = leftmargin.toString() + "px";
+    this.document.getElementById("floatingcontainer").style.marginTop = topmargin.toString() + "px";
 }
 
 // currentID is used to store the id of current active item
@@ -135,8 +145,6 @@ var dataArray=0;
 
 // After fetch, startRendering() Starts to render script
 function startRendering(data){
-    // Center align the content of webpage
-    windowresize();
     dataArray = data;
     // At startup the active item is the first elemennt
     id=0;          
@@ -155,7 +163,8 @@ function startRendering(data){
     Renderimage();
     // textboxmarkup() used to add title as label
     textboxmarkup();
-
+    // Center align the content of webpage
+    windowresize();
     // Add EventListener for on click behaviour of the list
     for (var i = 0; i < elements.length; i++) {
     elements[i].addEventListener("click", function() {

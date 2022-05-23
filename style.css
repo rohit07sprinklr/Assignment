@@ -46,7 +46,7 @@ img.logo{
     height: 45px;
     object-fit:cover;
 }
-img{
+.imagedisplay img{
     width: 500px;
     height: 700px;
     object-fit:cover;
